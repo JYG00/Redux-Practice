@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.1/redux.js"
+      integrity="sha512-aU+9st6E3LYPknXJiOkhUXxYz/QbB1IDf1YUYzCCbgiwOCu2g/1pH+68ROdxC3clouCOVfO6u2g7qoB43rfmQg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+  <body>
+    <style>
+      .container {
+        border: 5px solid #000;
+        padding: 10px;
+      }
+    </style>
+    <div id="red"></div>
+    <div id="blue"></div>
+    <div id="green"></div>
+    <script>
+      // reducer 디스패치에서 액션이 일어나면 리듀서가 액션값과 기존에 있던 state값을 참조해서 새로운 state 값을 만들어줍니다
+      function reducer(state, action) {
+        console.log(state, action);
+        if (state == undefined) {
+          return { color: "yellow" };
+        }
+        var newState;
+        if (action.type === "CHANGE_COLOR") {
+          newState = Object.assign({}, state, { color: action.color });
+        }
+        console.log(action.type, action, state, newState);
+        return newState;
+      }
+      // store 값을 등록합니다 (등록하기 위해서 reducer가 필요함)
+      var store = Redux.createStore(
+        reducer,
+        window.__REDUX_DEVTOOLS_EXTENSION__ &&
+          window.__REDUX_DEVTOOLS_EXTENSION__()
+      );
+      console.log(store.getState());
+      function red() {
+        // state 값을 가져옵니다
+        var state = store.getState();
+        document.querySelector("#red").innerHTML = `
+                                          <div class="container" id="component_red" style="background-color:${state.color}">
+                                                  <h1>red</h1>
+                                                  <input type="button" value="fire" onclick="store.dispatch({type:'CHANGE_COLOR',color:'red'})"/>
+                                          </div>
+                                  `;
+      }
+      // 스토어의 값이 바뀔때마다 red 함수가 호출됩니다
+      store.subscribe(red);
+      red();
+
+      function blue() {
+        // state 값을 가져옵니다
+        var state = store.getState();
+        document.querySelector("#blue").innerHTML = `
+                                          <div class="container" id="component_blue" style="background-color:${state.color}">
+                                                  <h1>blue</h1>
+                                                  <input type="button" value="fire" onclick="store.dispatch({type:'CHANGE_COLOR',color:'blue'})"/>
+                                          </div>
+                                  `;
+      }
+      // 스토어의 값이 바뀔때마다 blue 함수가 호출됩니다
+      store.subscribe(blue);
+      blue();
+
+      function green() {
+        // state 값을 가져옵니다
+        var state = store.getState();
+        document.querySelector("#green").innerHTML = `
+                                          <div class="container" id="component_green" style="background-color:${state.color}">
+                                                  <h1>green</h1>
+                                                  <input type="button" value="fire" onclick="store.dispatch({type:'CHANGE_COLOR',color:'green'})"/>
+                                          </div>
+                                  `;
+      }
+      // 스토어의 값이 바뀔때마다 green 함수가 호출됩니다
+      store.subscribe(green);
+      green();
+    </script>
+  </body>
+</html>
